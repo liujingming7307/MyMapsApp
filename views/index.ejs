@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/reset.css"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_337910_4hh8211xzgp66r.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src='/javascripts/jquery-3.2.1.js'></script>
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.0&key=49e7284f8ed43e65094f4be59e9d1518"></script>
+    <script type="text/javascript" src='/javascripts/knockout-3.4.2.js'></script>
+    <script type="text/javascript" src='/javascripts/request.js'></script>
+  </head>
+  <body>
+  <div class="container">
+    <div class="topbar clearfix">
+      <h1 class="fl"><a href="javascript:" onclick="location.reload()"><%= title %></a></h1>
+      <div class="searchbox fl">
+        <form action="javascript:">
+          <input id="input_id" type="text" placeholder="请输入关键字">
+          <button id="button_id" type="button" class="iconfont icon-search"></button>
+        </form>
+      </div>
+      <div class="menu_btn fl">
+        <i class="iconfont icon-menu"></i>
+      </div>
+      <div class="offset"></div>
+      <div class="weatherbox fr">
+        <img id="weatherpic" class="fl"/>
+        <p id="weathercontent" class="fl"></p>
+      </div>
+    </div>
+    <ul id="panel" class="menu_group"data-bind="foreach: markers">
+      <li class='menu_item' data-bind="text: name"><i class='iconfont icon-you fr'></i></li>
+    </ul>
+    <div id="map"></div>
+    <div id="panel"></div>
+  </div>
+  </body>
+</html>

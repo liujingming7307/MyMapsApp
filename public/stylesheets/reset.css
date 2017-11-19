@@ -1,0 +1,36 @@
+@charset "UTF-8";
+body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select,img{
+    margin:0;
+    padding:0;
+}
+body{
+    font-size: 12px;
+    font-family: "微软雅黑";
+}
+header,footer,nav,aside,article,section{
+    display: block;
+}
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.clearfix:after{
+    content:"";
+    display: block;
+    clear: both;
+}
+a{
+    text-decoration: none;
+    color: #000000;
+}
+li{
+    list-style-type: none;
+}
+img{
+    /*ie图片边框bug*/
+    border:0;
+    /*底部3像素bug*/
+    display: block;
+}
