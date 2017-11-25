@@ -33,42 +33,58 @@ $(function(){
             placeSearch.search(e.poi.name);
         });
     }
+    function myViewModel (){
+        var self = this;
+        //绑定一个空数组之后异步加载获取
+        self.markers = ko.observableArray([]);
+        //列表隐藏/显示
+        self.isHideMenu = ko.observable(false);
+        self.toggleHide = function(){
+            self.isHideMenu(!this.isHideMenu());
+        }
+        //查询按钮方法
+        self.search = function (){
+            AMap.service(['AMap.PlaceSearch'], function() {
+                var placeSearch = new AMap.PlaceSearch({ //构造地点查询类
+                    pageSize: 5,
+                    pageIndex: 1,
+                    city: '', //城市，默认全国
+                    map: map,
+                    panel: "panel"
+                });
+                //关键字查询
+                placeSearch.search($('#input_id').val());
+            });
+        }
+        //天气属性绑定
+        self.weatherPic = ko.observable('');
+        self.weatherContent = ko.observable('');
+    }
+    //定义vm变量,在之后异步加载定位数组时使用
+    var vm = new myViewModel();
+    ko.applyBindings(vm);
     //直接查询监听
     $('#input_id').on('keydown',function(e){
         if(e.keyCode === 13){
-            search()
+           // search()
         }
     });
     $('#button_id').on('click',function(e){
-            search()
+           // search()
     });
-    function search(){
-        AMap.service(['AMap.PlaceSearch'], function() {
-            var placeSearch = new AMap.PlaceSearch({ //构造地点查询类
-                pageSize: 5,
-                pageIndex: 1,
-                city: '', //城市，默认全国
-                map: map,
-                panel: "panel"
-            });
-            //关键字查询
-            placeSearch.search($('#input_id').val());
-        });
-    }
+
     //异步获取定位地点
     $.getJSON('../data/data.json',function(data){
-        ko.applyBindings({
-            markers : data.markers
-        });
-        createMarkers(data.markers);
+        var markerList = data.markers;
+        for(let i = 0; i < markerList.length; i++){
+            vm.markers.push(markerList[i]);
+        }
+        createMarkers(markerList);
     });
     //创建定位
     function createMarkers(markers){
+        var menu_item = $('.menu_item');
         for(let i = 0; i < markers.length; i++){
-            //DOM部分改由ko绑定
-            // var menu_item = $("<p class='menu_item'>"+markers[i].name+"<i class='iconfont icon-you fr'></i></p>");
-            // $('.menu_group').append(menu_item);
-            var menu_item = $('.menu_item');
             //在地图中增加5个坐标的位置
             var marker = new AMap.Marker({
                 map: map,
@@ -91,11 +107,14 @@ $(function(){
                 var name = data.location.name;//地点
                 var text = data.now.text;//天气
                 var temperature = data.now.temperature+'°C';//温度
-                var src = '/images/'+data.now.code+'.png';//图片
-                $('#weatherpic').attr({'src':src,'title':name+':'+temperature+' '+text});
-                $('#weathercontent').text(name+':'+temperature+' '+text);
+                vm.weatherPic('/images/'+data.now.code+'.png');//图片
+                vm.weatherContent(name+':'+temperature+' '+text);
+                // $('#weatherpic').attr({'src':src,'title':name+':'+temperature+' '+text});
+                // $('#weathercontent').text(name+':'+temperature+' '+text);
             }else{
-                $('#weatherpic').attr('src','/images/99.png');
+                vm.weatherPic('/images/99.png');//图片
+                vm.weatherContent('你若安好,便是晴天');
+                // $('#weatherpic').attr('src','/images/99.png');
             }
         },
         //错误处理
@@ -104,10 +123,10 @@ $(function(){
         }
     });
     //----------------------------------------------------------------------------------------
-    //列表隐藏
-    $('.menu_btn').on('click',function(){
-       $(this).toggleClass('active');
-       $('.menu_group').toggleClass('hide');
-       $('#map').toggleClass('cover');
-    })
+    // //列表隐藏
+    // $('.menu_btn').on('click',function(){
+    //    $(this).toggleClass('active');
+    //    $('.menu_group').toggleClass('hide');
+    //    $('#map').toggleClass('cover');
+    // })
 });

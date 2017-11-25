@@ -18,22 +18,22 @@
       <div class="searchbox fl">
         <form action="javascript:">
           <input id="input_id" type="text" placeholder="请输入关键字">
-          <button id="button_id" type="button" class="iconfont icon-search"></button>
+          <button id="button_id" data-bind="click : search" type="button" class="iconfont icon-search"></button>
         </form>
       </div>
-      <div class="menu_btn fl">
+      <div class="menu_btn fl" data-bind="click:toggleHide,css:{active:isHideMenu}" >
         <i class="iconfont icon-menu"></i>
       </div>
       <div class="offset"></div>
       <div class="weatherbox fr">
-        <img id="weatherpic" class="fl"/>
-        <p id="weathercontent" class="fl"></p>
+        <img id="weatherpic" data-bind="attr:{src:weatherPic,title:weatherContent}" class="fl"/>
+        <p id="weathercontent" data-bind="text:weatherContent" class="fl"></p>
       </div>
     </div>
-    <ul id="panel" class="menu_group"data-bind="foreach: markers">
+    <ul id="panel" class="menu_group" data-bind="foreach: markers,css:{'hide':isHideMenu}">
       <li class='menu_item' data-bind="text: name"><i class='iconfont icon-you fr'></i></li>
     </ul>
-    <div id="map"></div>
+    <div id="map" data-bind="css:{'cover':isHideMenu}"></div>
     <div id="panel"></div>
   </div>
   </body>
